@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.SystemClock;
 import android.widget.Toast;
 
 import com.example.labmacmini02.androidsqlite.model.Carro;
@@ -46,10 +47,6 @@ public class CamadaBanco extends SQLiteOpenHelper {
         SQLiteDatabase bancodados = this.getWritableDatabase();
         bancodados.insert("carro", null, dados);
         Toast.makeText( vrContexto, "Inserção Realizada", Toast.LENGTH_SHORT).show();
-
-        //AQUI VOU BUSCAR NO BANCO E MOSTRAR PARA VERIFICAR SE ALGO FOI GRAVADO.
-        vrCarro = listaCarros().get(1);
-        Toast.makeText( vrContexto, vrCarro.getNome() +" "+vrCarro.getPlaca()+" "+vrCarro.getAno(), Toast.LENGTH_SHORT).show();
 
 
     }
