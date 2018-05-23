@@ -53,7 +53,9 @@ public class CamadaBanco extends SQLiteOpenHelper {
 
     //REMOÇÃO
     public void removeCarro(String placa){
-
+        SQLiteDatabase db = getWritableDatabase();
+        String [] params = {placa};
+        db.delete("Carro","placa = ?",params);
     }
 
     //CONSULTA
@@ -62,10 +64,11 @@ public class CamadaBanco extends SQLiteOpenHelper {
         ArrayList<Carro> lista = new ArrayList<Carro>();
         SQLiteDatabase bancoDados = this.getReadableDatabase();
         Cursor cursor = bancoDados.query("carro", new String[]{"nome", "placa", "ano"},null, null, null, null, null);
-        vrCarro = new Carro();
+
 
 
         while(cursor.moveToNext()){
+            vrCarro = new Carro();
            vrCarro.setNome(cursor.getString(0));
            vrCarro.setPlaca(cursor.getString(1));
            vrCarro.setAno(cursor.getString(2));

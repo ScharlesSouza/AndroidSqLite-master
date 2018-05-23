@@ -11,9 +11,12 @@ import com.example.labmacmini02.androidsqlite.R;
 public class ItemCarro extends RecyclerView.ViewHolder {
 
 
-    TextView textNome = null;
-    TextView textPlaca = null;
-    TextView textAno = null;
+    private TextView textNome;
+    private TextView textPlaca;
+    private TextView textAno;
+    private TextView textId;
+
+
 
 
     public ItemCarro(View view){
@@ -23,6 +26,7 @@ public class ItemCarro extends RecyclerView.ViewHolder {
         this.textNome = (TextView)view.findViewById(R.id.textNome);
         this.textPlaca = (TextView)view.findViewById(R.id.textPlaca);
         this.textAno = (TextView)view.findViewById(R.id.textAno);
+        this.textId = (TextView)view.findViewById(R.id.textId);
 
 
     }
@@ -40,4 +44,5 @@ public class ItemCarro extends RecyclerView.ViewHolder {
         return textAno;
     }
 
+    public TextView getTextId() {  return textId;  }
 }

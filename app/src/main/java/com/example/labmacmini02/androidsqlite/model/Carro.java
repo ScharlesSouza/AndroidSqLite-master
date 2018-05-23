@@ -6,7 +6,7 @@ package com.example.labmacmini02.androidsqlite.model;
 
 public class Carro {
 
-    Integer _int;
+
 
     public Integer get_int() {
         return _int;
@@ -40,9 +40,16 @@ public class Carro {
         this.ano = ano;
     }
 
-    String nome;
-    String placa;
-    String ano;
+    public Integer getId() { return _id;  }
+
+    public void setId(Integer id) { this._id = id; }
+
+
+    private Integer _int = null;
+    private String nome = null;
+    private String placa = null;
+    private String ano = null;
+    private Integer _id = null;
 
 
 }
