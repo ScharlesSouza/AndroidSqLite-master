@@ -15,16 +15,22 @@ import com.example.labmacmini02.androidsqlite.model.ItemCarro;
 
 import java.util.ArrayList;
 
+
+
+
+
 public class AdaptadorCarros extends RecyclerView.Adapter<ItemCarro>{
 
     Context contexto = null;
     ArrayList<Carro> lista = null;
     private AlertDialog alerta;
+    AdapterListener listener=null;
 
-    AdaptadorCarros(Context contexto, ArrayList<Carro> lista){
+    AdaptadorCarros(Context contexto, ArrayList<Carro> lista, AdapterListener listener){
 
         this.contexto = contexto;
         this.lista = lista;
+        this.listener = listener;
     }
 
     //METODO CHAMADO N VEZES PARA INFLAR O XML DA CELULA E RETORNAR UM OBJETO DE LAYOUT
@@ -42,7 +48,7 @@ public class AdaptadorCarros extends RecyclerView.Adapter<ItemCarro>{
      * É onde a mágica acontece!
      * */
     @Override
-    public void onBindViewHolder(@NonNull ItemCarro holder, final int position) {
+    public void onBindViewHolder(@NonNull final ItemCarro holder, final int position) {
         Carro carro = lista.get(position);
 
 
@@ -50,8 +56,10 @@ public class AdaptadorCarros extends RecyclerView.Adapter<ItemCarro>{
         holder.getTextNome().setText(carro.getNome());
         holder.getTextPlaca().setText(carro.getPlaca());
         holder.getTextAno().setText(carro.getAno());
+        //holder.getTextId().setText(carro.getId());
 
         /*
+            //AO CLICAR NO CAMPO NOME  CHAMA UMA ACTIVITY DE DETALHES
             holder.getTextoNome().setOnClickListener(new View.OnClickListener(){
 
                 @Override
@@ -63,46 +71,66 @@ public class AdaptadorCarros extends RecyclerView.Adapter<ItemCarro>{
                     Log.d("posicao", posicao);
                     intent.putExtra("Nome", lista.get(position).material);
 
-
-
                     contexto.startActivity(intent);
-
-
                 }
-
-
-
             });
         */
 
-        holder.getTextNome().setOnLongClickListener(new View.OnLongClickListener() {
+        //CLIQUE LONGO
+        //AO CLICAR NA CELULA HOLDER COM CLIQUE LONGO
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+
+         /*
+           //CHAMA O METODO ON LONGCLIQUE E CHAMA O METODO DA INTERFACE LISTENER
             @Override
             public boolean onLongClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
-                builder.setTitle("Titulo");
-                //define a mensagem
-                builder.setMessage("Apagar " + lista.get(position).getNome());
-                //define um botão como positivo
-                builder.setPositiveButton("Apagar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        //NetworkUtils.Apagar(lista.get(position));
-                        Toast.makeText(contexto, lista.get(position).getNome()+" Apagada", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                //define um botão como negativo.
-                builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface arg0, int arg1) {
-                    }
-                });
-                //cria o AlertDialog
-                alerta = builder.create();
-                //Exibe
-                alerta.show();
-                return true;
+
+                listener.listenerRemoveCarro(holder.itemView, position);
+               return true;
             }
+         */
 
+           //IMPLEMENTAÇÃO LOCAL  DO METODO ONLONG CLIQUE LISTENER
+           @Override
+           public boolean onLongClick(View view) {
+
+               AlertDialog.Builder builder = new AlertDialog.Builder(contexto);
+               builder.setTitle("Titulo");
+               //define a mensagem
+               builder.setMessage("Apagar " + lista.get(position).
+
+                       getNome());
+               //define um botão como positivo
+               builder.setPositiveButton("Apagar", new DialogInterface.OnClickListener()
+
+               {
+                   public void onClick(DialogInterface arg0, int arg1) {
+                       //NetworkUtils.Apagar(lista.get(position));
+                       Toast.makeText(contexto, lista.get(position).getNome() + " Apagada", Toast.LENGTH_SHORT).show();
+                       CamadaBanco bancoDados = new CamadaBanco(contexto, "BDCarros", 1);
+                       bancoDados.removeCarro(lista.get(position).getPlaca());
+                       notifyItemRemoved(position);
+
+
+                   }
+               });
+               //define um botão como negativo.
+               builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener()
+
+               {
+                   public void onClick(DialogInterface arg0, int arg1) {
+                   }
+               });
+               //cria o AlertDialog
+               alerta = builder.create();
+               //Exibe
+               alerta.show();
+
+               //CHAMO O LISTENER DA ACTIVITY DO RECYCLEVIEW, PARA QUE POSSA SER ATUALIZADO O RECYCLEVIEW
+                listener.listenerRemoveCarro(holder.itemView, position);
+               return true;
+           }
         });
-
     }
 
 
